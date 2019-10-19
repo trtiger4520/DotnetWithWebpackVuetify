@@ -1,0 +1,38 @@
+{
+  "name": "web",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --watch"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "css-loader": "^3.2.0",
+    "mini-css-extract-plugin": "^0.8.0",
+    "node-sass": "^4.12.0",
+    "optimize-css-assets-webpack-plugin": "^5.0.3",
+    "sass-loader": "^8.0.0",
+    "style-loader": "^1.0.0",
+    "ts-loader": "^6.2.0",
+    "typescript": "^3.6.3",
+    "vue-loader": "^15.7.1",
+    "vue-template-compiler": "^2.6.10",
+    "vuex-module-decorators": "^0.10.1",
+    "webpack": "^4.41.0",
+    "webpack-cli": "^3.3.9"
+  },
+  "dependencies": {
+    "@google/markerclusterer": "^1.0.3",
+    "@google/markerclustererplus": "^2.1.11",
+    "@types/googlemaps": "^3.37.7",
+    "@types/markerclustererplus": "^2.1.33",
+    "bootstrap": "^4.3.1",
+    "vue": "^2.6.10",
+    "vue-class-component": "^7.1.0",
+    "vue-property-decorator": "^8.2.2",
+    "vuex": "^3.1.1"
+  }
+}
