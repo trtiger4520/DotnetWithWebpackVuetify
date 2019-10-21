@@ -70,32 +70,34 @@ export default class Maps extends Vue {
         if (!el) { return; }
         const { zoom, centerLocation: center } = this;
         this.map = new google.maps.Map(el, this.GoogleMapInitOption);
-        this.GetMapInitData();
-        this.markerCluster = new MarkerClusterer(this.map, 
-            this.states.reduce((markers: google.maps.Marker[], state) => {  
-                if (state.Marker) markers.push(state.Marker);
-                return markers; 
-            }, []), 
-            {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+        this.GetMapInitData(this.map);
     }
 
-    GetMapInitData() {
+    GetMapInitData(map: google.maps.Map) {
         const _this = this;
         const data = this.GetMapInitDataAjax();
         data.then(res => {
             if (!res.Success) { console.error('取得車輛資訊失敗') }
             if (!res.Data) {return;}
             _this.states = _this.ConvertCarGroupsToCarState(res.Data.CarGroups);
+            const markers = _this.states.reduce((markers: google.maps.Marker[], state) => {  
+                if (state.Marker) markers.push(state.Marker);
+                return markers; 
+            }, []);
+        console.log('MarkerClusterer', MarkerClusterer, res, _this.states, markers);
+        this.markerCluster = new MarkerClusterer(map, markers,
+            {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
         })
     }
 
     ConvertCarGroupsToCarState(groups: CarGroups[]): CarState[] {
-        let MarkIndex: number = 0;
+        const _this = this;
+        const states: CarState[] = [];
         return groups.reduce((states, group, index) => {
             const carStates: CarState[] = group.Cars.map(car => {
-                const state: CarState = {
+                return {
                     ...car,
-                    MarkerId: '#Marker' + MarkIndex.toString(),
+                    MarkerId: '#Marker' + car.VehicleId,
                     GroupId: group.GroupId,
                     Marker: new google.maps.Marker({
                         position: new google.maps.LatLng(
@@ -103,11 +105,9 @@ export default class Maps extends Vue {
                             car.LastCoordinate.Longitude)
                     }),
                 };
-                MarkIndex++;
-                return state;
             });
-            return states
-        }, []);
+            return [...states, ...carStates];
+        }, states);
     }
 
     // CreateMarkerByLastLocation() {
