@@ -9,7 +9,7 @@ module.exports = {
     entry: './src/main.ts',
     output: {
         filename: 'main.js',
-        path: path.resolve(__dirname, 'wwwroot/scripts')
+        path: path.resolve(__dirname, 'wwwroot')
     },
     resolve: {
         extensions: [".ts", ".vue"]
@@ -19,12 +19,25 @@ module.exports = {
             { test: /\.(sa|sc|c)ss$/i, use: [ {
                 loader: MiniCssExtractPlugin.loader,
                 options: {
-                  // you can specify a publicPath here
-                  // by default it uses publicPath in webpackOptions.output
-                  publicPath: '../wwwroot/styles',
+                  publicPath: './',
                   hmr: process.env.NODE_ENV === 'development',
                 },
-              },  'css-loader', 'sass-loader' ] },
+              },  'css-loader', 'sass-loader' ] 
+            },
+            {
+                test: /\.(woff(2)?|ttf|eot|svg|png|jpg|gif|ico)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+                loader: 'file-loader'
+            },
+            {
+                test: /\.(woff(2)?)$/,
+                use: {
+                    loader: 'url-loader',
+                    options: {
+                        limit: 8192,
+                        fallback: require.resolve('file-loader'),
+                    }
+                }
+            },
             {
                 test: /\.tsx?$/, use: {
                     loader: 'ts-loader',
@@ -41,9 +54,6 @@ module.exports = {
     plugins: [
         new VueLoaderPlugin(),
         new OptimizeCssAssetsPlugin(),
-        new MiniCssExtractPlugin({
-            filename: '../styles/[name].css',
-            chunkFilename: '../styles/[id].css'
-        })
+        new MiniCssExtractPlugin()
     ]
 };
